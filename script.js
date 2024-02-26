@@ -61,7 +61,7 @@ controls.update();
 
 // Lets start to create OL map 
 var osm = new ol.layer.Tile({
-    extent: [-180, -90, 180, 90],
+    // extent: [-180, -90, 180, 90],
     source: new ol.source.OSM({
         preload: 10,
         tilePixelRatio: 2,
@@ -71,7 +71,7 @@ var osm = new ol.layer.Tile({
 
 var view = new ol.View({
     projection: "EPSG:4326",
-    extent: [-180, -90, 180, 90],   //extent option in view - it will be return from pixel to coordinates accurately so its important to enable 
+    // extent: [-180, -90, 180, 90],   //extent option in view - it will be return from pixel to coordinates accurately so its important to enable 
     zoom: 2,
     // center: [0, 0],
     center: ol.proj.fromLonLat([0, 0]),
@@ -174,9 +174,9 @@ map.on("rendercomplete", function () {
         }
     );
 
-
     // Create a THREE.js CanvasTexture using the generated canvas
     var texture = new THREE.CanvasTexture(mapCanvas);
+    texture.encoding = THREE.sRGBEncoding;
     // Assign the texture to the material of the globe
     globe.material.map = texture;
     // Notify THREE.js that the material needs an update
@@ -192,9 +192,9 @@ var currentWidth = 1000;
 
 controls.addEventListener("end", function (event) {
 
-    //     // Raycasting is used to determine what objects in the scene the user is interacting and here based on the camera's view
+    //  Raycasting is used to determine what objects in the scene the user is interacting and here based on the camera's view
     raycaster.setFromCamera({ x: 0, y: 0 }, camera);
-    // // // the code sets up a raycaster based on the camera's view and checks for intersections with a 3D object called "globe"
+    //  the code sets up a raycaster based on the camera's view and checks for intersections with a 3D object called "globe"
     let intersects = raycaster.intersectObject(globe);
     //  pixel-to-coordinate transformations.
     let x = -map.getCoordinateFromPixel([
@@ -209,105 +209,182 @@ controls.addEventListener("end", function (event) {
         (intersects[0].uv.y * currentWidth) / 2
     ])[0];
 
-    // A circle feature is created with a specified center "[y, x]" and radius "200"
+    // A circle feature is created with a specified center "[y, x]" and radius "1"
     var circle = new ol.Feature({
-        geometry: new ol.geom.Circle([y, x], 200)
+        geometry: new ol.geom.Circle([y, x], 1)
     });
 
     // The extent of the map (represented by "osm") is updated based on the extent of the circle feature.
     var circleSource = new ol.source.Vector({
         features: [circle]
     });
+
     osm.setExtent(circleSource.getExtent());
-    // var csmz = camera.zoom
-    // console.log(csmz);
 
     var camZoom = Math.floor(camera.zoom)
     console.log(camZoom)
 
-    // if (camZoom > 12) {
-    //     // Hide the globe and show the flat map
-    //     globe.visible = false;
-    //     map.getLayers().forEach(layers => {
-    //         layers.setVisible(true);
-    //     });
-    // } else {
-    //     // Hide the flat map and show the globe
-    //     globe.visible = true;
-    //     map.getLayers().forEach(layer => {
-    //         layer.setVisible(true);
-    //     });
-    // }
+    if (camZoom > 300) {
+        // Hide the globe and show the flat map
+        globe.visible = false;
+        map.getLayers().forEach(layers => {
+            layers.setVisible(true);
+        });
+    } else {
+        // Hide the flat map and show the globe
+        globe.visible = true;
+        map.getLayers().forEach(layer => {
+            layer.setVisible(true);
+        });
+    }
 
     switch (camZoom) {
         case 1:
             document.getElementById("map").style.width = "1000px";
             document.getElementById("map").style.height = "500px";
-            document.getElementById("map").style.opacity = 1;
+            // document.getElementById("map").style.opacity = 1;
             if (currentWidth !== 1000) {
                 map.updateSize();
                 view.setResolution(0.36);
                 currentWidth = 1000;
             }
             break;
-        case 2:
+        case 5:
             document.getElementById("map").style.width = "2000px";
             document.getElementById("map").style.height = "1000px";
             if (currentWidth !== 2000) {
                 map.updateSize();
                 view.setResolution(0.225);
                 currentWidth = 2000;
+                controls.rotateSpeed = 0.5;
             }
             break;
-        case 3:
+        case 8:
             document.getElementById("map").style.width = "3000px";
             document.getElementById("map").style.height = "1500px";
             if (currentWidth !== 3000) {
                 map.updateSize();
                 view.setResolution(0.18);
                 currentWidth = 3000;
+                controls.rotateSpeed = 0.025;
             }
             break;
-        case 4:
+        case 12:
             document.getElementById("map").style.width = "4000px";
             document.getElementById("map").style.height = "2000px";
             if (currentWidth !== 4000) {
                 map.updateSize();
                 view.setResolution(0.15);
                 currentWidth = 4000;
+                controls.rotateSpeed = 0.025;
             }
             break;
-        case 5:
-            document.getElementById("map").style.width = "5000px";
-            document.getElementById("map").style.height = "2500px";
-            if (currentWidth !== 5000) {
-                map.updateSize();
-                view.setResolution(0.12);
-                currentWidth = 5000;
-            }
-            break;
-        case 6:
+        case 18:
             document.getElementById("map").style.width = "6000px";
             document.getElementById("map").style.height = "3000px";
             if (currentWidth !== 6000) {
                 map.updateSize();
-                view.setResolution(0.17);
+                view.setResolution(0.1125);
                 currentWidth = 6000;
+                controls.rotateSpeed = 0.025;
             }
             break;
-        case 6:
-            document.getElementById("map").style.width = "7000px";
-            document.getElementById("map").style.height = "3500px";
-            if (currentWidth !== 7000) {
+        case 22:
+            document.getElementById("map").style.width = "8000px";
+            document.getElementById("map").style.height = "4000px";
+            if (currentWidth !== 8000) {
                 map.updateSize();
-                view.setResolution(0.225);
-                currentWidth = 7000;
+                view.setResolution(0.09);
+                currentWidth = 8000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 31:
+            document.getElementById("map").style.width = "10000px";
+            document.getElementById("map").style.height = "5000px";
+            if (currentWidth !== 10000) {
+                map.updateSize();
+                view.setResolution(0.056);
+                currentWidth = 10000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 36:
+            document.getElementById("map").style.width = "12000px";
+            document.getElementById("map").style.height = "6000px";
+            if (currentWidth !== 12000) {
+                map.updateSize();
+                view.setResolution(0.045);
+                currentWidth = 12000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 40:
+            document.getElementById("map").style.width = "14000px";
+            document.getElementById("map").style.height = "7000px";
+            if (currentWidth !== 14000) {
+                map.updateSize();
+                view.setResolution(0.028);
+                currentWidth = 14000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 46:
+            document.getElementById("map").style.width = "16000px";
+            document.getElementById("map").style.height = "8000px";
+            if (currentWidth !== 16000) {
+                map.updateSize();
+                view.setResolution(0.0225);
+                currentWidth = 16000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 50:
+            document.getElementById("map").style.width = "18000px";
+            document.getElementById("map").style.height = "9000px";
+            if (currentWidth !== 18000) {
+                map.updateSize();
+                view.setResolution(0.0125);
+                currentWidth = 18000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 51:
+            document.getElementById("map").style.width = "20000px";
+            document.getElementById("map").style.height = "10000px";
+            if (currentWidth !== 20000) {
+                map.updateSize();
+                view.setResolution(0.035);
+                currentWidth = 20000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 56:
+            document.getElementById("map").style.width = "24000px";
+            document.getElementById("map").style.height = "12000px";
+            if (currentWidth !== 24000) {
+                map.updateSize();
+                view.setResolution(0.045);
+                currentWidth = 24000;
+                controls.rotateSpeed = 0.025;
+            }
+            break;
+        case 60:
+            document.getElementById("map").style.width = "30000px";
+            document.getElementById("map").style.height = "15000px";
+            if (currentWidth !== 30000) {
+                map.updateSize();
+                view.setResolution(0.052);
+                currentWidth = 30000;
+                controls.rotateSpeed = 0.025;
             }
             break;
         default:
             break;
     }
 });
+
+
 
 var container = document.getElementById("container");
 container.appendChild(renderer.domElement);
@@ -316,7 +393,8 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
-    // globe.rotation.y += 0.0005
+    globe.rotation.y += 0.0005
     galaxy.rotation.y -= 0.0002
 }
 animate();
+
