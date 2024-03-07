@@ -393,7 +393,7 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
-    globe.rotation.y += 0.0005
+    // globe.rotation.y += 0.0005
     galaxy.rotation.y -= 0.0002
 }
 animate();

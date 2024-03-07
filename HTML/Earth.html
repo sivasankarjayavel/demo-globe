@@ -48,7 +48,7 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-        
+
         let camera, controls, scene, renderer;
         let composer;
         var map;
@@ -86,11 +86,40 @@
             scene.add(globe);
 
 
+            // After initializing your camera, scene, and renderer
+
+            // Define a function to perform frustum culling
+            // function frustumCulling() {
+            //     const frustum = new THREE.Frustum();
+            //     const cameraViewProjectionMatrix = new THREE.Matrix4();
+            //     // camera.matrixWorldInverse.getInverse(camera.matrixWorld);
+            //     camera.matrixWorldInverse.getInverse( camera.matrixWorld );
+            //     cameraViewProjectionMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+            //     frustum.setFromProjectionMatrix(cameraViewProjectionMatrix);
+
+            //     // Iterate through objects in the scene
+            //     scene.traverse(function (object) {
+            //         if (object instanceof THREE.Mesh) { // Check if the object is a mesh
+            //             // Compute the bounding box of the object
+            //             const objectBounds = new THREE.Box3().setFromObject(object);
+
+            //             // Perform frustum culling test
+            //             if (!frustum.intersectsBox(objectBounds)) {
+            //                 object.visible = false; // Hide objects outside the view frustum
+            //             } else {
+            //                 object.visible = true; // Show objects inside the view frustum
+            //             }
+            //         }
+            //     });
+            // }
+
+
             var container = document.getElementById("container");
             container.appendChild(renderer.domElement);
 
             function animate() {
                 requestAnimationFrame(animate);
+                // frustumCulling()
                 renderer.render(scene, camera);
             }
             animate();
@@ -151,7 +180,6 @@
                 globe.material.needsUpdate = true;
             });
 
-
             var raycaster = new THREE.Raycaster();
 
             var currentWidth = 1000;
@@ -167,10 +195,14 @@
                     (intersects[0].uv.y * currentWidth) / 2
                 ])[1];
 
+
                 let y = map.getCoordinateFromPixel([
                     intersects[0].uv.x * currentWidth,
                     (intersects[0].uv.y * currentWidth) / 2
                 ])[0];
+
+                console.log(x, y);
+
 
                 var circle = new ol.Feature({
                     geometry: new ol.geom.Circle([y, x], 1)
