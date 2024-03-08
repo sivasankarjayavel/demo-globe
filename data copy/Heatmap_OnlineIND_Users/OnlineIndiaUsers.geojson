@@ -1,0 +1,83 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "weight": 0.5
+            },
+            "geometry": {
+                "coordinates": [
+                    78.72611186631161,
+                    17.361078887313482
+                ],
+                "type": "Point"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "weight": 1
+            },
+            "geometry": {
+                "coordinates": [
+                    77.9167095363099,
+                    23.5752568350198
+                ],
+                "type": "Point"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "weight": 0.3
+            },
+            "geometry": {
+                "coordinates": [
+                    78.56423140031131,
+                    10.690514015147002
+                ],
+                "type": "Point"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "weight": 0.8
+            },
+            "geometry": {
+                "coordinates": [
+                    76.86448650730767,
+                    33.98091162037191
+                ],
+                "type": "Point"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "weight": 0.1
+            },
+            "geometry": {
+                "coordinates": [
+                    72.16995299329608,
+                    23.27818419722651
+                ],
+                "type": "Point"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "weight": 0.4
+            },
+            "geometry": {
+                "coordinates": [
+                    86.57731446733004,
+                    25.927168765800204
+                ],
+                "type": "Point"
+            }
+        }
+    ]
+}

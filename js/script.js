@@ -37,14 +37,14 @@ var camera = new THREE.OrthographicCamera(
 camera.position.set(0, 0, 100);
 
 var globe = new THREE.Mesh(
-    new THREE.SphereGeometry(90, 128, 128),
+    new THREE.SphereGeometry(90, 64, 64),
     new THREE.MeshPhongMaterial()
 );
 scene.add(globe);
 
 var galGeometry = new THREE.SphereGeometry(900, 300, 300)
 var galMaterial = new THREE.MeshBasicMaterial({
-    map: new THREE.TextureLoader().load("data/galaxy.png"),
+    map: new THREE.TextureLoader().load("../data/galaxy.png"),
     side: THREE.BackSide
 })
 var galaxy = new THREE.Mesh(galGeometry, galMaterial)
@@ -71,18 +71,18 @@ var osm = new ol.layer.Tile({
 
 var view = new ol.View({
     projection: "EPSG:4326",
-    // extent: [-180, -90, 180, 90],   //extent option in view - it will be return from pixel to coordinates accurately so its important to enable 
+    extent: [-180, -90, 180, 90],   //extent option in view - it will be return from pixel to coordinates accurately so its important to enable 
     zoom: 2,
+    center: ol.proj.fromLonLat([-122.416667, 37.783333]),
     // center: [0, 0],
-    center: ol.proj.fromLonLat([0, 0]),
     // duration: 500, // Set the duration in milliseconds
 });
-// var tileGrid = new ol.tilegrid.createXYZ({ extent: [-180, -90, 180, 90],tileSize: 256, maxZoom: 18 });
-// var tile = tileGrid.fullTileRanges_
-// console.log(tile);
+var tileGrid = new ol.tilegrid.createXYZ({ extent: [-180, -90, 180, 90], tileSize: 256, maxZoom: 22 });
+var tile = tileGrid.fullTileRanges_
+console.log(tile);
 
 var layers = new ol.layer.Tile({
-    // extent: [-180, -90, 180, 90],
+    extent: [-180, -90, 180, 90],
     source: new ol.source.OSM({
         projection: 'EPSG:4326',
     })
@@ -136,7 +136,6 @@ map.on("rendercomplete", function () {
     // Create a new canvas element
     var mapCanvas = document.createElement("canvas");
     // Get the size of the map in pixels
-
     var size = map.getSize();
     // console.log(size);
     // Set the width and height of the canvas, taking into account the device pixel ratio
@@ -189,6 +188,14 @@ map.on("rendercomplete", function () {
 var raycaster = new THREE.Raycaster();
 
 var currentWidth = 1000;
+
+window.addEventListener('resize', onWindowResize);
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
 
 controls.addEventListener("end", function (event) {
 
@@ -384,8 +391,6 @@ controls.addEventListener("end", function (event) {
     }
 });
 
-
-
 var container = document.getElementById("container");
 container.appendChild(renderer.domElement);
 
@@ -396,5 +401,8 @@ function animate() {
     // globe.rotation.y += 0.0005
     galaxy.rotation.y -= 0.0002
 }
+
 animate();
+
+
 
